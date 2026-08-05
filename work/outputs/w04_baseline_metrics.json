@@ -1,0 +1,58 @@
+{
+  "slice": {
+    "features_month": "2026-03",
+    "label_month": "2026-04",
+    "decision_moment": "2026-03-31",
+    "volume_floor_mar_impressions": 30
+  },
+  "queue_rows": 125573,
+  "base_rate": 0.5181,
+  "precision_at_k": {
+    "10": 0.7,
+    "20": 0.7,
+    "50": 0.68,
+    "100": 0.75,
+    "500": 0.682,
+    "1000": 0.665,
+    "5000": 0.6592,
+    "10000": 0.6596
+  },
+  "lift_at_k": {
+    "10": 1.351,
+    "20": 1.351,
+    "50": 1.312,
+    "100": 1.448,
+    "500": 1.316,
+    "1000": 1.284,
+    "5000": 1.272,
+    "10000": 1.273
+  },
+  "baselines": {
+    "random_at_100_mean": 0.5234,
+    "random_at_100_std": 0.0488,
+    "impressions_only_at_100": 0.39,
+    "dummy_most_frequent_accuracy": 0.5181,
+    "rejected_draft_risk_times_volume": {
+      "10": 0.5,
+      "100": 0.53,
+      "1000": 0.584
+    }
+  },
+  "reason_code_rates": {
+    "CTR_FAR_BELOW_POSITION": 0.5487,
+    "NO_CLICKS_AT_TOP10": 0.6323,
+    "SPIKE_LIKELY_TO_REVERT": 0.4727,
+    "VISIBLE_ONLY": 0.4002
+  },
+  "reason_code_counts": {
+    "CTR_FAR_BELOW_POSITION": 51294,
+    "VISIBLE_ONLY": 26383,
+    "SPIKE_LIKELY_TO_REVERT": 24620,
+    "NO_CLICKS_AT_TOP10": 23276
+  },
+  "signal_verdicts": {
+    "staleness_content_updated_date": "FALSE",
+    "ctr_vs_position": "CONFIRMED",
+    "volume_as_risk_signal": "OPPOSITE"
+  }
+}
