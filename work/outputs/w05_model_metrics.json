@@ -1,0 +1,73 @@
+{
+  "slice": {
+    "features_month": "2026-03",
+    "label_month": "2026-04",
+    "decision_moment": "2026-03-31",
+    "volume_floor_mar_impressions": 30
+  },
+  "validation": {
+    "design": "client-grouped GroupKFold 4-fold",
+    "pooled_test_rows": 125573,
+    "pooled_test_base_rate": 0.5181
+  },
+  "models": {
+    "base rate (no model)": {
+      "precision_at_k": {
+        "10": 0.518,
+        "50": 0.518,
+        "100": 0.518,
+        "500": 0.518
+      },
+      "roc_auc": 0.5
+    },
+    "baseline rule (w04)": {
+      "precision_at_k": {
+        "10": 0.7,
+        "50": 0.7,
+        "100": 0.74,
+        "500": 0.676
+      },
+      "roc_auc": 0.596
+    },
+    "logistic regression": {
+      "precision_at_k": {
+        "10": 0.8,
+        "50": 0.88,
+        "100": 0.82,
+        "500": 0.714
+      },
+      "roc_auc": 0.52
+    },
+    "random forest": {
+      "precision_at_k": {
+        "10": 0.6,
+        "50": 0.66,
+        "100": 0.76,
+        "500": 0.754
+      },
+      "roc_auc": 0.555
+    }
+  },
+  "interpretation": {
+    "rf_importances": {
+      "log_mar_impressions": 0.1507,
+      "ctr_mar": 0.2149,
+      "mar_avg_position": 0.2182,
+      "momentum_feb_to_mar_pct": 0.1474,
+      "engagement_rate_mar": 0.029,
+      "has_clicks": 0.0371,
+      "has_feb_data": 0.1568,
+      "has_ga4": 0.046
+    },
+    "lr_coefs": {
+      "log_mar_impressions": -0.0976,
+      "ctr_mar": -0.1685,
+      "mar_avg_position": -0.1256,
+      "momentum_feb_to_mar_pct": -0.0203,
+      "engagement_rate_mar": -0.0107,
+      "has_clicks": -0.0896,
+      "has_feb_data": 0.3474,
+      "has_ga4": -0.0526
+    }
+  }
+}
