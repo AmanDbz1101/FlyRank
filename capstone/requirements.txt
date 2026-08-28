@@ -1,0 +1,19 @@
+# Agentic Content Decline Investigator - Capstone
+# Core
+pandas>=2.0
+numpy>=1.24
+duckdb>=1.0
+scikit-learn>=1.3
+
+# LLM
+groq>=0.4
+
+# Web app
+streamlit>=1.30
+plotly>=5.18
+
+# Data
+huggingface-hub>=0.20
+
+# Testing
+pytest>=7.4
