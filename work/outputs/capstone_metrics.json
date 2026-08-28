@@ -1,0 +1,58 @@
+{
+  "population": {
+    "total_pages": 125573,
+    "clients": 44,
+    "base_rate": 0.5180970431541813,
+    "features": [
+      "log_mar_impressions",
+      "ctr_mar",
+      "mar_avg_position",
+      "momentum_feb_to_mar_pct",
+      "engagement_rate_mar",
+      "has_clicks",
+      "has_feb_data",
+      "has_ga4"
+    ]
+  },
+  "model_comparison": [
+    {
+      "Model": "Base rate",
+      "P@10": 0.5,
+      "P@50": 0.56,
+      "P@100": 0.56,
+      "P@500": 0.58,
+      "ROC AUC": 0.5
+    },
+    {
+      "Model": "Baseline rule",
+      "P@10": 0.9,
+      "P@50": 0.72,
+      "P@100": 0.73,
+      "P@500": 0.706,
+      "ROC AUC": 0.5442959772616349
+    },
+    {
+      "Model": "Logistic Regression",
+      "P@10": 0.8,
+      "P@50": 0.88,
+      "P@100": 0.82,
+      "P@500": 0.714,
+      "ROC AUC": 0.5204588321074581
+    },
+    {
+      "Model": "Random Forest",
+      "P@10": 0.6,
+      "P@50": 0.74,
+      "P@100": 0.76,
+      "P@500": 0.772,
+      "ROC AUC": 0.5580284117731708
+    }
+  ],
+  "agent_demo": {
+    "pages_tested": 10,
+    "actions": {
+      "REFRESH": 10
+    },
+    "avg_elapsed": 3.6009703636169434
+  }
+}

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Content Decline Investigator</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a2e; --accent: #0f3460; --accent2: #e94560;
+    --muted: #6b7280; --border: #e5e7eb; --card: #f8fafc; --code-bg: #f1f5f9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    color: var(--fg); background: var(--bg);
+    line-height: 1.7; max-width: 800px; margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  header { text-align: center; margin-bottom: 3rem; border-bottom: 2px solid var(--accent); padding-bottom: 2rem; }
+  header h1 { font-size: 2rem; line-height: 1.3; margin-bottom: 0.5rem; color: var(--accent); }
+  header .subtitle { font-size: 1.1rem; color: var(--muted); font-style: italic; margin-bottom: 1rem; }
+  header .meta { font-size: 0.9rem; color: var(--muted); }
+  header .meta a { color: var(--accent); text-decoration: none; }
+  header .meta a:hover { text-decoration: underline; }
+  h2 { font-size: 1.4rem; color: var(--accent); margin: 2.5rem 0 1rem; border-left: 4px solid var(--accent2); padding-left: 0.75rem; }
+  h3 { font-size: 1.15rem; color: var(--fg); margin: 1.5rem 0 0.75rem; }
+  p { margin-bottom: 1rem; }
+  .abstract {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.5rem; margin: 1.5rem 0 2rem; font-style: italic;
+  }
+  .abstract strong { font-style: normal; color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.95rem; }
+  th, td { padding: 0.6rem 0.8rem; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--card); font-weight: 600; color: var(--accent); }
+  tr:hover { background: var(--card); }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1rem 0 1.5rem; }
+  .metric-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem; text-align: center;
+  }
+  .metric-card .value { font-size: 1.8rem; font-weight: 700; color: var(--accent); font-family: 'Courier New', monospace; }
+  .metric-card .label { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
+  .highlight { background: #fef3c7; padding: 0.15rem 0.4rem; border-radius: 3px; font-weight: 600; }
+  code {
+    background: var(--code-bg); padding: 0.15rem 0.4rem; border-radius: 3px;
+    font-family: 'Courier New', monospace; font-size: 0.9em;
+  }
+  pre {
+    background: var(--code-bg); padding: 1rem; border-radius: 6px;
+    overflow-x: auto; font-size: 0.85rem; margin: 1rem 0 1.5rem;
+    border: 1px solid var(--border);
+  }
+  .callout {
+    border-left: 4px solid var(--accent2); background: #fef2f2;
+    padding: 1rem 1.25rem; margin: 1.5rem 0; border-radius: 0 6px 6px 0;
+  }
+  .callout.info { border-left-color: var(--accent); background: #eff6ff; }
+  .architecture {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.5rem; margin: 1.5rem 0; font-family: 'Courier New', monospace;
+    font-size: 0.9rem; line-height: 1.5; white-space: pre; overflow-x: auto;
+  }
+  .section-num { color: var(--accent2); margin-right: 0.5rem; }
+  footer {
+    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+    font-size: 0.85rem; color: var(--muted); text-align: center;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+  li { margin-bottom: 0.3rem; }
+  .chart-placeholder {
+    background: var(--card); border: 2px dashed var(--border); border-radius: 8px;
+    padding: 2rem; text-align: center; color: var(--muted); margin: 1rem 0 1.5rem;
+  }
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    header h1 { font-size: 1.5rem; }
+    .metric-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Agentic Content Decline Investigator</h1>
+  <p class="subtitle">A Multi-Agent System for Investigating Why Content Pages Decline in Search Visibility</p>
+  <p class="meta">
+    FlyRank ML Internship 2026 &middot; Capstone Project<br>
+    Built on the <a href="https://flyrank.ai" target="_blank" rel="noopener">FlyRank</a> internship dataset
+  </p>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- ABSTRACT -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="abstract">
+  <strong>Abstract.</strong>
+  Content teams invest effort creating pages that drive organic traffic, but visibility can erode without clear warning. This project asks: <strong>can we identify which content pages are declining in search visibility, and generate actionable investigation reports?</strong> We built a multi-agent system — a rule-based Planner, a DuckDB Investigator, and a Groq LLM Synthesizer — chained via LangChain's Runnable interface. On a population of 125,573 pages from the FlyRank internship warehouse, a Logistic Regression model achieves <span class="highlight">P@50 = 0.880</span> (1.70× base rate), outperforming a hand-crafted baseline rule at P@100 = 0.750. The agent pipeline generates decline investigation reports that cite specific warehouse evidence and recommend actions (REFRESH / MONITOR / NO_ACTION). All work is observational; causal claims require a controlled experiment.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 1. INTRODUCTION -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2><span class="section-num">1.</span> Introduction</h2>
+
+<p>Organic search is a primary traffic driver for content-heavy sites. When a page's impressions drop, editors face a triage problem: <em>which pages are actually declining, and which ones are worth investigating?</em> Manual review of thousands of pages is infeasible. A scoring system that ranks pages by decline risk — and explains why — lets editors focus their limited time on the pages most likely to recover with intervention.</p>
+
+<p>This project builds a <strong>content decline investigator</strong> with two components:</p>
+<ol>
+  <li><strong>A ranking model</strong> that scores 125K+ pages by decline risk, using only signals knowable at a single decision moment (March 31, 2026).</li>
+  <li><strong>A multi-agent pipeline</strong> that, given a page, generates a human-readable investigation report citing warehouse evidence and recommending an action.</li>
+</ol>
+
+<p>The work is positioned as <strong>decision-support</strong>, not prediction. The model tells editors where to look; the agents tell them what the data shows. Neither claims to know why Google ranks pages the way it does.</p>
+
+<h3>Research Question</h3>
+<p>Given March 2026 search and analytics signals, can we rank content pages by their likelihood of declining in April — and generate actionable investigation reports for the highest-risk pages?</p>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 2. DATA -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2><span class="section-num">2.</span> Data</h2>
+
+<h3>Dataset</h3>
+<p>All data comes from the <a href="https://flyrank.ai" target="_blank" rel="noopener">FlyRank ML Internship</a> warehouse — a pseudonymized, public-safe release of search intelligence data. The warehouse contains three tables:</p>
+
+<table>
+  <tr><th>Table</th><th>Rows</th><th>Grain</th><th>Description</th></tr>
+  <tr><td><code>fact_content_daily_performance</code></td><td>78.8M</td><td>report_date × client × content</td><td>Daily search + analytics metrics (partitioned by month)</td></tr>
+  <tr><td><code>dim_content</code></td><td>519,606</td><td>One per content item</td><td>Page metadata (type, created date, search volume)</td></tr>
+  <tr><td><code>dim_clients</code></td><td>104</td><td>One per client</td><td>Client metadata (tracking start dates)</td></tr>
+</table>
+
+<h3>Time Windows</h3>
+<table>
+  <tr><th>Window</th><th>Dates</th><th>Purpose</th></tr>
+  <tr><td>Feature window</td><td>February + March 2026</td><td>Compute all features the model uses</td></tr>
+  <tr><td>Decision moment</td><td>2026-03-31</td><td>Everything must be knowable here</td></tr>
+  <tr><td>Label window</td><td>April 2026</td><td>Compute the <code>is_declining</code> outcome</td></tr>
+</table>
+
+<h3>Population</h3>
+<div class="metric-grid">
+  <div class="metric-card"><div class="value">125,573</div><div class="label">Pages in study population</div></div>
+  <div class="metric-card"><div class="value">44</div><div class="label">Active clients (March 2026)</div></div>
+  <div class="metric-card"><div class="value">0.5181</div><div class="label">Base rate P(declining)</div></div>
+  <div class="metric-card"><div class="value">≥ 30</div><div class="label">Min March impressions</div></div>
+</div>
+
+<h3>Label Definition</h3>
+<pre>is_declining = (april_impressions &lt; 0.8 * march_impressions)</pre>
+<p>With volume floor: March impressions ≥ 30. Low-volume wiggles are excluded.</p>
+
+<h3>Exclusions and Why</h3>
+<ul>
+  <li><strong><code>fact_content_query_90d</code></strong> — 90-day window overlaps March+April, leaking the label.</li>
+  <li><strong>April / future-window columns</strong> — contain the answer; attack A in the feature leakage audit shows a jump to 0.999 ROC AUC when used.</li>
+  <li><strong><code>trend_direction</code> / <code>trend_pct</code></strong> — derived from the starter label; rebuilding is circular.</li>
+  <li><strong><code>content_updated_date</code></strong> — snapshot-as-of-build runs to 2026-07-06, making it unknowable for 82.8% of pages at the decision moment.</li>
+  <li><strong>Product flags</strong> (<code>health_score</code>, etc.) — not in the public dataset; would be circular if rebuilt.</li>
+  <li><strong>Raw query / URL / title fields</strong> — private; not shipped in the dataset.</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 3. METHODOLOGY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2><span class="section-num">3.</span> Methodology</h2>
+
+<h3>Feature Vector</h3>
+<p>8 inputs, all knowable at the decision moment (2026-03-31):</p>
+<table>
+  <tr><th>Feature</th><th>Description</th><th>NaN handling</th></tr>
+  <tr><td><code>log_mar_impressions</code></td><td>log1p(March GSC impressions)</td><td>None</td></tr>
+  <tr><td><code>ctr_mar</code></td><td>March clicks / impressions × 100</td><td>0 (no clicks)</td></tr>
+  <tr><td><code>mar_avg_position</code></td><td>Impression-weighted March position index</td><td>fillna(0)</td></tr>
+  <tr><td><code>momentum_feb_to_mar_pct</code></td><td>(Mar − Feb) / Feb × 100</td><td>fillna(0) — 16% missing</td></tr>
+  <tr><td><code>engagement_rate_mar</code></td><td>GA4 engaged / sessions × 100</td><td>fillna(0) — 51% missing</td></tr>
+  <tr><td><code>has_clicks</code></td><td>1 when March clicks > 0</td><td>Never missing</td></tr>
+  <tr><td><code>has_feb_data</code></td><td>1 when page has February rows</td><td>Never missing</td></tr>
+  <tr><td><code>has_ga4</code></td><td>1 when March GA4 sessions > 0</td><td>Never missing</td></tr>
+</table>
+
+<div class="callout info">
+  <strong>Missingness is a signal, not noise.</strong> The <code>has_*</code> flags make the measurement gap explicit. GA4 availability is three-valued (TRUE / FALSE / NULL); we filter with <code>IS TRUE</code>, not <code>fillna(0)</code>.
+</div>
+
+<h3>Baseline Rule</h3>
+<p>A hand-crafted scoring rule from Week 4:</p>
+<pre>score = risk_points + ctr_shortfall + impact
+risk_points = 1 + 2×(CTR gap OR no clicks at top-10) + 1×(spike)
+ctr_shortfall = clip(1 - ctr_ratio, 0, 1)
+impact = log1p(clicks_lost) / 10</pre>
+
+<h3>Models</h3>
+<table>
+  <tr><th>Model</th><th>Why</th><th>Complexity</th></tr>
+  <tr><td>Logistic Regression</td><td>Readable coefficients; honest floor for "can the signals do anything?"</td><td>Low</td></tr>
+  <tr><td>Random Forest</td><td>Handles nonlinear interactions; compared to LR so complexity earns its place</td><td>Medium</td></tr>
+</table>
+
+<h3>Validation Design</h3>
+<p><strong>Client-grouped 4-fold cross-validation</strong> (GroupKFold by <code>client_hash_id</code>). A fold never contains pages from clients the model trained on. This prevents information leakage from shared site structure.</p>
+
+<div class="callout">
+  <strong>Why grouped?</strong> Pages from the same client share patterns (same site structure, same editorial process). A random split lets the model memorize a client and meet it again in testing. Week 3 measured this: random split 0.622 vs. client-grouped 0.597 ROC AUC — a 0.025 inflation from leakage.
+</div>
+
+<p>The pooled out-of-fold test set contains all 125,573 pages, so baseline numbers are directly comparable.</p>
+
+<h3>Leakage Controls</h3>
+<ol>
+  <li>All features strictly before the label window (March → April).</li>
+  <li>No label-derived features (<code>trend_direction</code>, <code>trend_pct</code> excluded).</li>
+  <li>No product flags (<code>health_score</code> not in dataset).</li>
+  <li>Client-grouped validation: no client in both train and test.</li>
+  <li>Baseline rule reproduced on the full population before comparison.</li>
+</ol>
+
+<h3>Agent Pipeline</h3>
+<div class="architecture">
+┌─────────────────────────────────────────────────────────────┐
+│                 DeclineInvestigatorPipeline                  │
+│                    (LangChain RunnableSequence)              │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌──────────────┐    ┌──────────────────┐    ┌───────────┐ │
+│  │   Planner    │───▶│   Investigator   │───▶│Synthesizer│ │
+│  │ (rule-based) │    │    (DuckDB)      │    │ (Groq LLM)│ │
+│  └──────────────┘    └──────────────────┘    └───────────┘ │
+│   7 rules              query + classify       Qwen 3.8-27b │
+│   → hypotheses         → SUPPORTS/            → report +    │
+│                          CONTRADICTS/           action      │
+│                          INCONCLUSIVE                       │
+└─────────────────────────────────────────────────────────────┘</div>
+
+<p><strong>Planner</strong> — Rule-based (no LLM). 7 rules generate hypotheses from page features. Deterministic: same inputs produce the same hypotheses.</p>
+
+<p><strong>Investigator</strong> — Executes DuckDB queries against the warehouse to test each hypothesis. Classifies evidence as SUPPORTS, CONTRADICTS, or INCONCLUSIVE.</p>
+
+<p><strong>Synthesizer</strong> — Groq-hosted Qwen 3.8-27b generates a 3–5 sentence report citing specific evidence. Recommends REFRESH, MONITOR, or NO_ACTION. Falls back to template-based reports if the API is unavailable.</p>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 4. RESULTS -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2><span class="section-num">4.</span> Results</h2>
+
+<h3>Ranking Performance</h3>
+<table>
+  <tr><th>Model</th><th>P@10</th><th>P@50</th><th>P@100</th><th>P@500</th><th>ROC AUC</th></tr>
+  <tr><td>Base rate (no model)</td><td>0.518</td><td>0.518</td><td>0.518</td><td>0.518</td><td>0.500</td></tr>
+  <tr><td>Baseline rule (w04)</td><td>0.700</td><td>0.700</td><td>0.740</td><td>0.676</td><td>0.596</td></tr>
+  <tr><td><strong>Logistic Regression</strong></td><td><strong>0.800</strong></td><td><strong>0.880</strong></td><td>0.820</td><td>0.714</td><td>0.520</td></tr>
+  <tr><td>Random Forest</td><td>0.600</td><td>0.660</td><td>0.760</td><td><strong>0.754</strong></td><td>0.555</td></tr>
+</table>
+
+<div class="callout info">
+  <strong>Key finding:</strong> LR beats the baseline at P@50 (0.880 vs. 0.700, <span class="highlight">1.26× improvement</span>). For a 50-page review budget, the model catches 44 actual declines vs. 35 for the rule. At P@500, RF's deeper queue wins (0.754 vs. 0.714).
+</div>
+
+<h3>Interpretation</h3>
+<p><strong>LR coefficients</strong> (standardized): <code>has_feb_data</code> (+0.347) is the strongest positive predictor — pages without February data are more likely to decline. <code>ctr_mar</code> (−0.169) and <code>mar_avg_position</code> (−0.126) are negative — higher CTR and better positions reduce decline risk.</p>
+
+<p><strong>RF feature importance</strong>: <code>mar_avg_position</code> (21.8%), <code>ctr_mar</code> (21.5%), and <code>has_feb_data</code> (15.7%) dominate. Position and CTR together explain 43% of the model's decisions.</p>
+
+<h3>Error Analysis</h3>
+<p>The baseline rule misses <strong>Feedly articles</strong> (32% of declines) — the model partially recovers this blind spot. False positive rate is ~30% across momentum bands, concentrated in pages with high momentum (spikes that may revert).</p>
+
+<h3>Agent Pipeline Output</h3>
+<p>Tested on 3 sample pages from the top of the baseline queue:</p>
+<table>
+  <tr><th>Page type</th><th>Mar impressions</th><th>CTR</th><th>Hypotheses</th><th>Action</th></tr>
+  <tr><td>Article (position 4.8)</td><td>38,865</td><td>0.00%</td><td>2 (position_ctr_gap, zero_click_opportunity)</td><td>REFRESH</td></tr>
+  <tr><td>Article (position 9.6)</td><td>28,950</td><td>0.00%</td><td>2 (position_ctr_gap, zero_click_opportunity)</td><td>REFRESH</td></tr>
+  <tr><td>Article (position 3.4)</td><td>24,908</td><td>0.00%</td><td>2 (position_ctr_gap, zero_click_opportunity)</td><td>REFRESH</td></tr>
+</table>
+<p>All three pages show a 100% CTR gap (actual 0.0% vs. position-band average 0.3%). The Synthesizer cites specific numbers and recommends snippet/CTA refresh.</p>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 5. LIMITATIONS -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2><span class="section-num">5.</span> Limitations &amp; Honest Framing</h2>
+
+<div class="callout">
+  <strong>This work is observational, not experimental.</strong> It cannot claim:
+  <ul>
+    <li>"Refreshing a page will cause traffic to recover" — no controlled experiment was run.</li>
+    <li>"The model predicts Google's algorithm changes" — we model outcomes in one portfolio, not Google's ranking.</li>
+    <li>"Page X declined because of Y" — cross-sectional data does not support causal claims.</li>
+  </ul>
+</div>
+
+<h3>What the model does</h3>
+<p><strong>Rank</strong> pages by decline risk. The model says "Page A shows stronger decline signals than Page B" — this is supported by the data.</p>
+
+<h3>What the model does not do</h3>
+<p><strong>Predict</strong> whether a specific page will decline. The model cannot say "Page A will decline by 15% next month."</p>
+
+<h3>Data limitations</h3>
+<ul>
+  <li><strong>Unbalanced panel</strong> — Only 44 of 104 clients have March data; absent pages are invisible.</li>
+  <li><strong>GA4 sparsity</strong> — 51% of rows have no GA4 data. The <code>has_ga4</code> flag makes this explicit.</li>
+  <li><strong>Single label window</strong> — April < 80% of March. Cannot distinguish seasonality from real decay.</li>
+  <li><strong>Low ROC AUC</strong> — LR: 0.520, RF: 0.555. Modest overall separation, but precision@K is strong at the top.</li>
+</ul>
+
+<h3>Agent limitations</h3>
+<ul>
+  <li>Rule-based Planner has limited hypothesis diversity.</li>
+  <li>Single-window queries cannot detect multi-month trends.</li>
+  <li>LLM may generate plausible but unsupported claims — evidence list constrains the output.</li>
+  <li>Reports reflect March 2026 state only; warehouse is a snapshot, not live.</li>
+</ul>
+
+<h3>Claim Ladder</h3>
+<p>Every claim in this paper uses the appropriate level:</p>
+<table>
+  <tr><th>Level</th><th>Meaning</th><th>Example from this work</th></tr>
+  <tr><td>Observed</td><td>Directly measured</td><td>"LR achieves P@50 = 0.880 on the pooled test set"</td></tr>
+  <tr><td>Directional</td><td>Trend in the data</td><td>"The primary driver appears to be CTR gap at position 4.8"</td></tr>
+  <tr><td>Decision-support</td><td>Helps make a decision</td><td>"Page X is a candidate for snippet refresh"</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 6. RECOMMENDATIONS -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2><span class="section-num">6.</span> Ranked Recommendations</h2>
+
+<h3>Action Playbook</h3>
+<table>
+  <tr><th>Action</th><th>When</th><th>What to check</th></tr>
+  <tr><td><strong>REFRESH</strong></td><td>Top-10 position with CTR < 50% of position-band average</td><td>Snippet, title tag, meta description, schema markup</td></tr>
+  <tr><td><strong>REFRESH</strong></td><td>Zero clicks at position < 20</td><td>Snippet appeal, query intent match, SERP features</td></tr>
+  <tr><td><strong>REFRESH</strong></td><td>New page (≤90 days) with low CTR</td><td>Title/meta freshness, internal linking, indexing</td></tr>
+  <tr><td><strong>MONITOR</strong></td><td>Impressions declined 20–50% MoM</td><td>Watch for another period before acting</td></tr>
+  <tr><td><strong>MONITOR</strong></td><td>High momentum spike (>200%)</td><td>May be trending query fading; wait for stabilization</td></tr>
+  <tr><td><strong>NO_ACTION</strong></td><td>No strong signals detected</td><td>Page appears stable; allocate time elsewhere</td></tr>
+</table>
+
+<h3>Priority for a 50-Page Review Budget</h3>
+<p>Using LR P@50 = 0.880: <strong>44 of the top 50 pages flagged by the model are actually declining</strong>. The baseline rule catches 35 of 50 at the same budget. The model saves editorial time by concentrating true declines at the top of the queue.</p>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 7. REPRODUCIBILITY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2><span class="section-num">7.</span> Reproducibility</h2>
+
+<table>
+  <tr><th>Artifact</th><th>Location</th></tr>
+  <tr><td>Week 1 — Research Question</td><td><code>work/notebooks/w01_research_question.ipynb</code></td></tr>
+  <tr><td>Week 2 — ML Task Framing</td><td><code>work/notebooks/w02_ml_task_framing.ipynb</code></td></tr>
+  <tr><td>Week 3 — Data Contract &amp; Feature Engineering</td><td><code>work/notebooks/w03_data_contract.ipynb</code></td></tr>
+  <tr><td>Week 3 — Feature &amp; Label Leakage Audit</td><td><code>work/notebooks/w03_feature_leakage_check.ipynb</code></td></tr>
+  <tr><td>Week 4 — Baseline Score</td><td><code>work/notebooks/w04_baseline_score.ipynb</code></td></tr>
+  <tr><td>Week 5 — Model Training</td><td><code>work/notebooks/w05_model.ipynb</code></td></tr>
+  <tr><td>Capstone — Agent Pipeline</td><td><code>capstone/src/agents/</code></td></tr>
+  <tr><td>Capstone — Streamlit App</td><td><code>capstone/app/app.py</code></td></tr>
+  <tr><td>This paper</td><td><code>docs/index.html</code></td></tr>
+</table>
+
+<h3>Environment</h3>
+<pre>Python 3.12 · pandas ≥ 2.0 · scikit-learn ≥ 1.3 · duckdb ≥ 1.0
+langchain-core ≥ 1.6 · langchain-groq ≥ 1.1 · streamlit ≥ 1.30
+HF_TOKEN (read-only) · GROQ_API_KEY (free tier)</pre>
+
+<h3>To run</h3>
+<pre># Install dependencies
+pip install -r capstone/requirements.txt
+
+# Run the agent pipeline
+python -c "
+from capstone.src.agents.pipeline import run_pipeline_on_page
+result = run_pipeline_on_page('content_hash_id', features, context)
+print(result.report)
+"
+
+# Run the Streamlit app
+streamlit run capstone/app/app.py</pre>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- 8. ACKNOWLEDGMENTS -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2><span class="section-num">8.</span> Acknowledgments &amp; Data Credit</h2>
+
+<p>This capstone was built as part of the <strong>FlyRank ML Internship 2026</strong>. All data, feature engineering patterns, and baseline rules were developed during the 5-week internship program.</p>
+
+<p><strong>Data credit:</strong> Built on the <a href="https://flyrank.ai" target="_blank" rel="noopener">FlyRank ML Internship</a> dataset — a pseudonymized, public-safe release of search intelligence data covering 125K+ content pages across 44 clients. The dataset is hosted on HuggingFace as <code>FlyRank/internship-warehouse</code>.</p>
+
+<p>The multi-agent architecture uses <a href="https://www.langchain.com/" target="_blank" rel="noopener">LangChain</a> for agent composability, <a href="https://duckdb.org/" target="_blank" rel="noopener">DuckDB</a> for warehouse queries, and <a href="https://groq.com/" target="_blank" rel="noopener">Groq</a> for LLM inference. The Streamlit app provides interactive exploration of the ranked queue and agent pipeline.</p>
+
+<footer>
+  <p>Agentic Content Decline Investigator &middot; FlyRank ML Internship 2026 Capstone</p>
+  <p>
+    <a href="https://flyrank.ai" target="_blank" rel="noopener">FlyRank</a> &middot;
+    <a href="https://github.com/aman-17/FlyRank">GitHub Repository</a>
+  </p>
+</footer>
+
+</body>
+</html>
