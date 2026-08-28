@@ -14,7 +14,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 # Ensure capstone package is importable
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from capstone.src.data.warehouse import load_population
 from capstone.src.data.features import build_feature_vector, FEATURES8
