@@ -96,7 +96,7 @@
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <div class="abstract">
   <strong>Abstract.</strong>
-  Content teams invest effort creating pages that drive organic traffic, but visibility can erode without clear warning. This project asks: <strong>can we identify which content pages are declining in search visibility, and generate actionable investigation reports?</strong> We built a multi-agent system — a rule-based Planner, a DuckDB Investigator, and a Groq LLM Synthesizer — chained via LangChain's Runnable interface. On a population of 125,573 pages from the FlyRank internship warehouse, a Logistic Regression model achieves <span class="highlight">P@50 = 0.880</span> (1.70× base rate), outperforming a hand-crafted baseline rule at P@100 = 0.750. The agent pipeline generates decline investigation reports that cite specific warehouse evidence and recommend actions (REFRESH / MONITOR / NO_ACTION). All work is observational; causal claims require a controlled experiment.
+  FlyRank manages thousands of content pages across 44 client portfolios, each driving organic search traffic. When visibility erodes — a page's impressions drop, clicks vanish, or CTR falls below its position-band average — editors face a triage problem: <em>which pages are actually declining, and which are worth investigating?</em> Manual review of 125K+ pages is infeasible. This capstone asks: <strong>can we rank content pages by decline risk and generate actionable investigation reports?</strong> We built a multi-agent system — a rule-based Planner, a DuckDB Investigator, and a Groq LLM Synthesizer — chained via LangChain's Runnable interface. On the FlyRank internship warehouse, a Logistic Regression model achieves <span class="highlight">P@50 = 0.880</span> (1.70× base rate), outperforming a hand-crafted baseline rule at P@100 = 0.750. For a 50-page review budget, the model catches ~44 actual declines vs. ~35 for the rule — saving editors roughly 2 extra productive reviews per cycle. The agent pipeline generates decline investigation reports that cite specific warehouse evidence and recommend actions (REFRESH / MONITOR / NO_ACTION). All work is observational; causal claims require a controlled experiment.
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -104,18 +104,20 @@
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <h2><span class="section-num">1.</span> Introduction</h2>
 
-<p>Organic search is a primary traffic driver for content-heavy sites. When a page's impressions drop, editors face a triage problem: <em>which pages are actually declining, and which ones are worth investigating?</em> Manual review of thousands of pages is infeasible. A scoring system that ranks pages by decline risk — and explains why — lets editors focus their limited time on the pages most likely to recover with intervention.</p>
+<p>FlyRank manages organic search visibility for 44 client portfolios, collectively driving traffic across 125K+ content pages. When a page's impressions drop — a keyword article slips from position 3 to position 15, a comparison page loses its featured snippet, or a landing page's CTR falls below its position-band average — the content team faces a triage problem: <em>which pages are actually declining, and which ones are worth investigating?</em> Manual review of thousands of pages is infeasible. A scoring system that ranks pages by decline risk — and explains why — lets editors focus their limited time on the pages most likely to recover with intervention.</p>
 
-<p>This project builds a <strong>content decline investigator</strong> with two components:</p>
+<p>This capstone uses the FlyRank internship warehouse as its <strong>case study</strong>. The warehouse captures the exact data FlyRank's content teams work with daily: Google Search Console impressions, clicks, and positions; GA4 engagement metrics; and page metadata. The problem is real: FlyRank's own research showed that content teams spend hours each month manually reviewing performance dashboards, often missing the pages that matter most. This project automates that triage.</p>
+
+<p>We build a <strong>content decline investigator</strong> with two components:</p>
 <ol>
-  <li><strong>A ranking model</strong> that scores 125K+ pages by decline risk, using only signals knowable at a single decision moment (March 31, 2026).</li>
+  <li><strong>A ranking model</strong> that scores 125K+ FlyRank pages by decline risk, using only signals knowable at a single decision moment (March 31, 2026).</li>
   <li><strong>A multi-agent pipeline</strong> that, given a page, generates a human-readable investigation report citing warehouse evidence and recommending an action.</li>
 </ol>
 
-<p>The work is positioned as <strong>decision-support</strong>, not prediction. The model tells editors where to look; the agents tell them what the data shows. Neither claims to know why Google ranks pages the way it does.</p>
+<p>The work is positioned as <strong>decision-support</strong>, not prediction. The model tells editors where to look; the agents tell them what the data shows. Neither claims to know why Google ranks pages the way it does. The case study demonstrates the approach on FlyRank's real data — the same data that powers the company's content intelligence platform.</p>
 
 <h3>Research Question</h3>
-<p>Given March 2026 search and analytics signals, can we rank content pages by their likelihood of declining in April — and generate actionable investigation reports for the highest-risk pages?</p>
+<p>Given March 2026 search and analytics signals from the FlyRank warehouse, can we rank content pages by their likelihood of declining in April — and generate actionable investigation reports for the highest-risk pages?</p>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <!-- 2. DATA -->
